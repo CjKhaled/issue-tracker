@@ -1,5 +1,10 @@
 {
   "dependencies": {
-    "express": "^4.20.0"
+    "@prisma/client": "^5.19.1",
+    "express": "^4.20.0",
+    "prisma": "^5.19.1"
+  },
+  "prisma": {
+    "schema": "models/prisma/schema.prisma"
   }
 }

@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("LOCAL_DB_URL")
+}
+
+enum Role {
+  ADMIN // creater of board
+  PROJECT_MANAGER // manages users/issues
+  DEVELOPER // fixes issues
+  SUBMITTER // submits issues
+}
+
+model User {
+  id        String   @id @default(uuid()) // enhanced security
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relationships
+  createdProjects Project[]     @relation("UserCreatedProjects") // a user can create many projects
+  projects        Project[] // many users can be in many projects
+  projectUser     ProjectUser[]
+}
+
+model Project {
+  id        String   @id @default(uuid())
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relationships
+  createdBy   User          @relation("UserCreatedProjects", fields: [createdById], references: [id])
+  createdById String
+  members     User[]
+  projectUser ProjectUser[]
+}
+
+// junction model needed to handle relationship between users and projects
+model ProjectUser {
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId String
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  role      Role
+
+  @@unique([projectId, userId]) // only one role per project
+}
