@@ -2,13 +2,18 @@
 const express = require("express");
 const app = express();
 const passport = require('passport')
-const initializePassport = require('./config/passport-config')
+const cookieParser = require('cookie-parser')
 
-initializePassport(passport)
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+require('./config/passportConfig')(passport)
+
 const authRouter = require('./routes/authRoutes')
+const projectRouter = require('./routes/projectRoutes')
+
 app.use("/", authRouter)
+app.use("/", projectRouter)
 
 app.listen(3000, () => console.log("server listening on port 3000!"));
