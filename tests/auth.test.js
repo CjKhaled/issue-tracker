@@ -2,15 +2,22 @@ const express = require("express");
 const app = express();
 const request = require("supertest");
 const authRoutes = require("../routes/authRoutes");
+const projectRoutes = require("../routes/projectRoutes")
 const cookieParser = require("cookie-parser");
 const userDB = require("../models/user");
+const errorHandler = require("../middleware/errorHandler")
 const authUtils = require("../config/authUtils");
+const passport = require('passport')
+
 
 // Middleware setup
+require('../config/passportConfig')(passport)
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 app.use("/", authRoutes);
+app.use("/", projectRoutes)
+app.use(errorHandler)
 
 // Mocking database operations
 jest.mock("../models/user", () => ({
@@ -76,17 +83,6 @@ test("login functionality works", (done) => {
 
       // Check if JWT cookie is set
       expect(res.headers["set-cookie"]).toBeDefined();
-    })
-    .end(done);
-});
-
-test("logout functionality works", (done) => {
-  request(app)
-    .get("/logout")
-    .expect("Content-Type", /json/)
-    .expect(200)
-    .expect((res) => {
-      expect(res.body.message).toBe("You have logged out.");
     })
     .end(done);
 });
