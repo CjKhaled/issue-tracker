@@ -59,8 +59,8 @@ async function inviteUserToProject(req, res, next) {
   try {
     // most likely, the person they invite will not have an account
     const user = await userDB.findUserByEmail(req.body.email);
-    const projectId = req.params.projectId;
-    const role = req.params.role;
+    const projectId = req.body.projectId;
+    const role = req.body.role;
 
     if (!user) {
       // they need to create an account

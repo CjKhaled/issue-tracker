@@ -7,7 +7,7 @@ router.get("/projects", authenticateJWT, controller.getProjects);
 router.post("/projects", authenticateJWT, controller.createProject);
 router.get("/projects/:projectId", authenticateJWT, controller.getProject);
 router.post(
-  "/projects/:projectId/invite-user/:role",
+  "/projects/invite-user",
   authenticateJWT,
   controller.inviteUserToProject
 );
