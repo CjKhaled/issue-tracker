@@ -32,7 +32,7 @@ async function loginExistingUser(req, res, next) {
         const user = await userDB.findUserByEmail(req.body.email)
 
         if (!user) {
-            res.status(401).json({ success: false, message: "could not find user"})
+            res.status(401).json({ success: false, message: "Incorrect email."})
         }
         
         // assume user is logged out, so they do not have a JWT yet
@@ -48,7 +48,7 @@ async function loginExistingUser(req, res, next) {
             })    
             res.status(200).json({ success: true, user: user, message: "You've successfully logged in!" })
         } else {
-            res.status(401).json({ success: false, message: "You entered the wrong password."})
+            res.status(401).json({ success: false, message: "Incorrect password."})
         }
     } catch (err) {
         next(err)
