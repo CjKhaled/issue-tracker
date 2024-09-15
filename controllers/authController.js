@@ -1,4 +1,3 @@
-const passport = require("passport");
 const auth = require("../config/authUtils");
 const userDB = require('../models/user')
 
