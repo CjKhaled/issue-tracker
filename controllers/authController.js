@@ -1,5 +1,6 @@
 const passport = require("passport");
 const auth = require("../config/authUtils");
+const userDB = require('../models/user')
 
 async function createNewUser(req, res, next) {
     // hash password
@@ -7,10 +8,8 @@ async function createNewUser(req, res, next) {
     const hashedPassword = await auth.hashPassword(req.body.password);
     const { firstName, lastName, email } = req.body;
 
-    // push into database, then get the user so we can give JWT
-
-    const user = await getUser()
-
+    // push into database, then give user JWT
+    const user = await userDB.createNewUser(firstName, lastName, email, hashedPassword)
     const jwt = auth.issueJWT(user);
 
     // most secure way to send JWT, make sure Bearer prefix is not added
@@ -30,7 +29,7 @@ async function createNewUser(req, res, next) {
 
 async function loginExistingUser(req, res, next) {
     try {
-        const user = await getUSer()
+        const user = await userDB.findUser(req.body.email)
 
         if (!user) {
             res.status(401).json({ success: false, message: "could not find user"})

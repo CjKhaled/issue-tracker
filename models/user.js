@@ -1,17 +1,30 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient()
 
-async function main() {
-    
+async function createNewUser(first, last, email, password) {
+    const user = await prisma.user.create({
+        data: {
+            firstName: first,
+            lastName: last,
+            email: email,
+            password: password
+        }
+    })
 
+    return user
 }
 
+async function findUser(email) {
+    const user = await prisma.user.findUnique({
+        where: {
+            email: email
+        }
+    })
 
-// disconnect from prisma db and error catch
-main().then(async () => {
-    await prisma.$disconnect
-}).catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect
-    process.exit(1)
-})
+    return user
+}
+
+module.exports = {
+    createNewUser,
+    findUser
+}

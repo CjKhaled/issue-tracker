@@ -18,5 +18,5 @@ function genKeyPair() {
     fs.writeFileSync(__dirname + '/keys/private.key', keyPair.privateKey)
 }
 
-
+// remember to make this run in server file
 genKeyPair()
