@@ -29,7 +29,7 @@ async function createNewUser(req, res, next) {
 
 async function loginExistingUser(req, res, next) {
     try {
-        const user = await userDB.findUser(req.body.email)
+        const user = await userDB.findUserByEmail(req.body.email)
 
         if (!user) {
             res.status(401).json({ success: false, message: "could not find user"})
@@ -53,12 +53,15 @@ async function loginExistingUser(req, res, next) {
     } catch (err) {
         next(err)
     }
-    
+}
+
+async function logoutUser(req, res, next) {
+    res.clearCookie('token')
+    res.status(200).json({ message: 'You have logged out.'})
 }
 
 module.exports = {
-  getLoginPage,
-  getSignUpPage,
   createNewUser,
   loginExistingUser,
+  logoutUser
 };

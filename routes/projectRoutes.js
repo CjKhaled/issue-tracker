@@ -4,6 +4,6 @@ const controller = require('../controllers/projectController')
 const passport = require('passport')
 
 // verify token
-router.get("/projects", passport.authenticate('jwt', {session: false}), controller)
+router.get("/projects", passport.authenticate('jwt', {session: false}), controller.getProjects)
 
 module.exports = router;
