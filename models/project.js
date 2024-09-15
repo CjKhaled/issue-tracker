@@ -6,7 +6,11 @@ async function createANewProject(userId, title) {
         const newProject = await prisma.project.create({
             data: {
                 title: title,
-                createdBy: userId,
+                createdBy: {
+                    connect: {
+                        id: userId
+                    }
+                },
                 projectUser: {
                     create: {
                         userId: userId,
@@ -21,7 +25,7 @@ async function createANewProject(userId, title) {
 
         return newProject
     } catch (error) {
-        throw new Error("Error creating project.")
+        throw new Error(error)
     }
 }
 
@@ -32,13 +36,6 @@ async function getProjectsForUser(userId) {
                 projectUser: {
                     some: {
                         userId: userId, // only get projects where this specific user is a part of
-                    },
-                },
-            },
-            include: {
-                projectUser: {
-                    include: {
-                        user: true
                     },
                 },
             },
