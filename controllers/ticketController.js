@@ -1,1 +1,0 @@
-// ticket creation, update, view, and deletion

@@ -13,9 +13,11 @@ require('./config/passportConfig')(passport)
 
 const authRouter = require('./routes/authRoutes')
 const projectRouter = require('./routes/projectRoutes')
+const issueRouter = require('./routes/issueRoutes')
 
 app.use("/", authRouter)
 app.use("/", projectRouter)
+app.use("/", issueRouter)
 
 app.use(errorHandler)
 
