@@ -14,6 +14,18 @@ enum Role {
   SUBMITTER // submits issues
 }
 
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Status {
+  OPEN
+  UNDER_DEVELOPMENT
+  CLOSED
+}
+
 model User {
   id        String   @id @default(uuid()) // enhanced security
   firstName String
@@ -27,6 +39,7 @@ model User {
   createdProjects Project[]     @relation("UserCreatedProjects") // a user can create many projects
   projects        Project[] // many users can be in many projects
   projectUser     ProjectUser[]
+  issuesSubmitted Issue[]
 }
 
 model Project {
@@ -40,6 +53,7 @@ model Project {
   createdById String
   members     User[]
   projectUser ProjectUser[]
+  issues      Issue[]
 }
 
 // junction model needed to handle relationship between users and projects
@@ -51,4 +65,18 @@ model ProjectUser {
   role      Role
 
   @@unique([projectId, userId]) // only one role per project
+}
+
+model Issue {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  priority    Priority
+  status      Status   @default(OPEN)
+  submitter   User     @relation(fields: [submitterId], references: [id])
+  submitterId String
+  project     Project  @relation(fields: [projectId], references: [id])
+  projectId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
