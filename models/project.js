@@ -39,6 +39,14 @@ async function getProjectsForUser(userId) {
           },
         },
       },
+      include: {
+        projectUser: {
+          select: {
+            userId: true,
+            role: true,
+          },
+        },
+      },
     });
 
     return projects;
