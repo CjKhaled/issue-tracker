@@ -17,7 +17,7 @@ const issueRouter = require('./routes/issueRoutes')
 
 app.use("/", authRouter)
 app.use("/", projectRouter)
-app.use("/", issueRouter)
+app.use("/projects/:projectId", issueRouter)
 
 app.use(errorHandler)
 
