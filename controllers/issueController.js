@@ -25,7 +25,7 @@ async function createIssue(req, res, next) {
 
 async function getIssue(req, res, next) {
     try {
-        const issueId = req.params.issueId
+        const issueId = req.params.ticketId
         const issue = await issueDB.getSingleIssue(issueId)
         res.status(200).json({success: true, issue: issue, message: "Successfully retrieved issue!"})
     } catch (error) {
@@ -37,8 +37,9 @@ async function getIssue(req, res, next) {
 async function updateIssue(req, res, next) {
     try {
         const {title, description, priority, status} = req.body
-        const issueId = req.params.issueId
-        const updatedIssue = await issueDB.updateSingleIssue(title, description, priority, status, issueId, req.user.id)
+        const issueId = req.params.ticketId
+        const projectId = req.params.projectId
+        const updatedIssue = await issueDB.updateSingleIssue(title, description, priority, status, issueId, req.user.id, projectId)
         res.status(200).json({success: true, updatedIssue: updatedIssue, message: "Successfully updated issue!"})  
     } catch (error) {
         console.log(error)
@@ -48,7 +49,7 @@ async function updateIssue(req, res, next) {
 
 async function deleteIssue(req, res, next) {
     try {
-        const issueId = req.params.issueId
+        const issueId = req.params.ticketId
         const deletedIssue = await issueDB.deleteSingleIssue(issueId)
         res.status(200).json({success: true, deletedIssue: deletedIssue, message: "Successfully deleted issue!"})  
     } catch (error) {

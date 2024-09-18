@@ -1,4 +1,3 @@
-const { updateIssue } = require("../controllers/issueController");
 const prisma = require("./prismaClient");
 
 async function createNewIssue(title, description, priority, projectId, submitterId) {
@@ -16,7 +15,10 @@ async function createNewIssue(title, description, priority, projectId, submitter
                 },
                 submitter: {
                     connect: {
-                        id: submitterId
+                        projectId_userId: {
+                            userId: submitterId,
+                            projectId: projectId
+                        }
                     }
                 }
             }
@@ -52,17 +54,42 @@ async function getSingleIssue(issueId) {
                 id: issueId
             },
             include: {
-                submitter: true
+                submitter: {
+                    select: {
+                        user: {
+                            select: {
+                                id: true,
+                                firstName: true,
+                                lastName: true,
+                                email: true
+                            }
+                        },
+                        role: true
+                    }
+                },
+                updatedBy: {
+                    select: {
+                        user: {
+                            select: {
+                                id: true,
+                                firstName: true,
+                                lastName: true,
+                                email: true
+                            }
+                        },
+                        role: true
+                    }
+                }
             }
-        })
+        });
 
-        return issue
+        return issue;
     } catch (error) {
-        throw new Error(error)
+        throw new Error(`Failed to fetch the issue: ${error.message}`);
     }
 }
 
-async function updateSingleIssue(title, description, priority, status, issueId, userId) {
+async function updateSingleIssue(title, description, priority, status, issueId, userId, projectId) {
     try {
         const updatedIssue = await prisma.issue.update({
             where: {
@@ -75,7 +102,10 @@ async function updateSingleIssue(title, description, priority, status, issueId, 
                 status: status,
                 updatedBy: {
                     connect: {
-                        id: userId
+                        projectId_userId: {
+                            userId: userId,
+                            projectId: projectId
+                        }
                     }
                 }
             }
