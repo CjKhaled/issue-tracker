@@ -31,19 +31,19 @@ async function setUserRole(req, res, next) {
 }
 
 function authorizeDelete(req, res, next) {
-    if (req.user.role === "ADMIN" || req.user.role === "PROJECT_MANAGER") {
-        next()
+    if (req.user.role !== "ADMIN" && req.user.role !== "PROJECT_MANAGER") {
+        return res.status(403).json({ success: false, message: "You are not authorized to perform this action." });
     }
 
-    res.status(403).json({success: false, message: "You are not authorized to perform this action."})
+    next();
 }
 
 function authorizeUpdate(req, res, next) {
-    if (req.user.role === "ADMIN" || req.user.role === "PROJECT_MANAGER" || req.user.role === "DEVELOPER") {
-        next()
+    if (req.user.role !== "ADMIN" && req.user.role !== "PROJECT_MANAGER" && req.user.role !== "DEVELOPER") {
+        return res.status(403).json({ success: false, message: "You are not authorized to perform this action." });
     }
 
-    res.status(403).json({success: false, message: "You are not authorized to perform this action."})
+    next();
 }
 
 module.exports = {

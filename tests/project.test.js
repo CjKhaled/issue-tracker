@@ -139,3 +139,26 @@ test("a user joining from an invite link works", (done) => {
     })
     .end(done);
 });
+
+test("inviting without the right role doesn't work", (done) => {
+    jest.spyOn(require("../models/project"), "getProjectForUser").mockResolvedValueOnce({
+      id: "test-project-id",
+      title: "Test Project",
+      projectUser: [
+        { userId: "test-user-id", role: "DEVELOPER" }, 
+      ],
+    });
+  
+    request(app)
+      .post("/projects/test-project-id/invite-user")
+      .send({
+        email: "invitee@example.com",
+        role: "DEVELOPER",
+      })
+      .expect(403)
+      .expect((res) => {
+        expect(res.body.success).toBe(false);
+        expect(res.body.message).toBe("You are not authorized to perform this action.");
+      })
+      .end(done);
+  });

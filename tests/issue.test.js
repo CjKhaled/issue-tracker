@@ -6,7 +6,7 @@ const issueRoutes = require("../routes/issueRoutes");
 const cookieParser = require("cookie-parser");
 const errorHandler = require("../middleware/errorHandler");
 const passport = require("passport");
-const issueDB = require("../models/prismaClient");
+const projectDB = require("../models/project");
 
 // Middleware setup
 require("../config/passportConfig")(passport);
@@ -138,9 +138,45 @@ test("deleting an issue works", (done) => {
 });
 
 test("deleting an issue without the right role doesn't work", (done) => {
+  jest.spyOn(projectDB, "getProjectForUser").mockResolvedValueOnce({
+    id: "test-project-id",
+    title: "Test Project",
+    projectUser: [{ userId: "test-user-id", role: "SUBMITTER" }],
+  });
 
-})
+  request(app)
+    .delete("/projects/test-project-id/tickets/test-issue-id")
+    .expect(403)
+    .expect((res) => {
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toBe(
+        "You are not authorized to perform this action."
+      );
+    })
+    .end(done);
+});
 
 test("updating an issue without the right role doesn't work", (done) => {
-    
-})
+  jest.spyOn(projectDB, "getProjectForUser").mockResolvedValueOnce({
+    id: "test-project-id",
+    title: "Test Project",
+    projectUser: [{ userId: "test-user-id", role: "SUBMITTER" }],
+  });
+
+  request(app)
+    .put("/projects/test-project-id/tickets/test-issue-id")
+    .send({
+      title: "Updated Issue",
+      description: "Updated description",
+      priority: "MEDIUM",
+      status: "OPEN",
+    })
+    .expect(403)
+    .expect((res) => {
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toBe(
+        "You are not authorized to perform this action."
+      );
+    })
+    .end(done);
+});
