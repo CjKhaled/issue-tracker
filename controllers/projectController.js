@@ -9,7 +9,6 @@ async function getProjects(req, res, next) {
       .status(200)
       .json({
         success: true,
-        user: req.user,
         projects: projects,
         message: "Successfully grabbed all your projects!",
       });
@@ -27,7 +26,6 @@ async function createProject(req, res, next) {
       .status(200)
       .json({
         success: true,
-        user: req.user,
         projectCreated: newProject,
         message: "Successfully created new project!",
       });
@@ -45,7 +43,6 @@ async function getProject(req, res, next) {
       .status(200)
       .json({
         success: true,
-        user: req.user,
         project: project,
         message: "Successfully grabbed your project!",
       });
@@ -59,7 +56,7 @@ async function inviteUserToProject(req, res, next) {
   try {
     // most likely, the person they invite will not have an account
     const user = await userDB.findUserByEmail(req.body.email);
-    const projectId = req.body.projectId;
+    const projectId = req.params.projectId;
     const role = req.body.role;
 
     if (!user) {

@@ -49,6 +49,10 @@ jest.mock("../models/project", () => ({
   getProjectForUser: jest.fn().mockResolvedValue({
     id: "test-project-id",
     title: "Test Project",
+    projectUser: [
+      { userId: "test-user-id", role: "ADMIN" },
+      { userId: "another-user-id", role: "DEVELOPER" },
+    ],
   }),
   findUserByEmail: jest.fn().mockResolvedValue({
     id: "test-user-id",
@@ -112,10 +116,9 @@ test("getting a single project works", (done) => {
 
 test("inviting a user works", (done) => {
   request(app)
-    .post("/projects/invite-user")
+    .post("/projects/test-project-id/invite-user")
     .send({
-      email: "test@example.com",
-      projectId: "test-project-id",
+      email: "invitee@example.com",
       role: "DEVELOPER",
     })
     .expect(200)
