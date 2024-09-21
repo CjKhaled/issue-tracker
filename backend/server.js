@@ -21,4 +21,4 @@ app.use("/projects/:projectId", issueRouter)
 
 app.use(errorHandler)
 
-app.listen(3000, () => console.log("server listening on port 3000!"));
+app.listen(80, () => console.log("server listening on port 3000!"));

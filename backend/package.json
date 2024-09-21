@@ -16,6 +16,7 @@
     "schema": "models/prisma/schema.prisma"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node config/genKeyPair.js && node server.js"
   }
 }
