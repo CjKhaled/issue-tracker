@@ -5,6 +5,7 @@ const passport = require('passport')
 const cookieParser = require('cookie-parser')
 const errorHandler = require("./middleware/errorHandler")
 
+require('dotenv')
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -21,4 +22,5 @@ app.use("/projects/:projectId", issueRouter)
 
 app.use(errorHandler)
 
-app.listen(3000, () => console.log("server listening on port 3000!"));
+const port = process.env.PORT || 3000
+app.listen(port, "0.0.0.0", () => console.log("server listening on port 3000!"));
