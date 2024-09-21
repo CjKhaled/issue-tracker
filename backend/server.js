@@ -23,4 +23,4 @@ app.use("/projects/:projectId", issueRouter)
 app.use(errorHandler)
 
 const port = process.env.PORT || 3000
-app.listen(port, () => console.log("server listening on port 3000!"));
+app.listen(port, "0.0.0.0", () => console.log(`server listening on port ${port}!`));
