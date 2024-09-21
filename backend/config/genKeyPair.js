@@ -14,9 +14,13 @@ function genKeyPair() {
         }
     })
 
+    if (!fs.existsSync(__dirname + '/keys')) {
+        fs.mkdirSync(__dirname + '/keys');
+    }
+
     fs.writeFileSync(__dirname + '/keys/public.key', keyPair.publicKey)
     fs.writeFileSync(__dirname + '/keys/private.key', keyPair.privateKey)
 }
 
-// remember to make this run in server file
+
 genKeyPair()
