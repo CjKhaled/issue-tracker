@@ -1,11 +1,11 @@
 // Entry point
+require('dotenv').config()
 const express = require("express");
 const app = express();
 const passport = require('passport')
 const cookieParser = require('cookie-parser')
 const errorHandler = require("./middleware/errorHandler")
 
-require('dotenv')
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
